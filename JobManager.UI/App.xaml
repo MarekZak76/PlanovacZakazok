@@ -1,0 +1,26 @@
+﻿<Application x:Class="JobManager.UI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:JobManager.UI"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <local:InvertBooleanConverter x:Key="InvertBoolean"  />
+        <local:ErrorCollectionConverter x:Key="ErrorCollection" />
+        <local:NullableConverter x:Key="Nullable" />
+        <Style TargetType="TextBox" x:Key="ErrorTooltip">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError"  Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors), Converter={StaticResource ErrorCollection}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ComboBox" x:Key="ComboBoxErrorTooltip">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError"  Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors), Converter={StaticResource ErrorCollection}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
+</Application>

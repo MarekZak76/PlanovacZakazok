@@ -1,0 +1,61 @@
+﻿<Window x:Class="JobManager.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JobManager.UI"
+        mc:Ignorable="d"
+        Title="Plánovač zakázok" Height="835" Width="1300"
+        WindowStartupLocation="CenterScreen">
+    
+    <DockPanel>        
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Refresh" Click="Refresh" />              
+                <MenuItem Header="Exit" Click="Shutdown"/>
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Height="25" Header="Zakázky" Click="Show_JobsPage"/>
+                <MenuItem Header="Pobočky" Click="Show_OfficesPage"/>
+            </MenuItem>
+        </Menu>
+
+        <StatusBar DockPanel.Dock="Bottom" 
+                   Height="25">          
+
+            <StatusBarItem x:Name="sbUser" ContentStringFormat="Uzivatel: {0}" Margin="5,0,5,0"/>
+            <StatusBarItem x:Name="sbComputer" ContentStringFormat="Pocitac: {0}" Margin="5,0,5,0"/>
+            <Separator Background="LightGray"/>
+            <StatusBarItem>
+                <StatusBarItem.DataContext>
+                    <local:DataClient />
+                </StatusBarItem.DataContext>
+                <TextBlock Text="{Binding Server_Static, StringFormat=Server: {0}}" Margin="5,0,5,0"/>
+            </StatusBarItem>           
+            <StatusBarItem DataContext="{x:Static local:JobList.Instance}" >
+                <ProgressBar                                 
+                        Height="15" 
+                        Width="450" 
+                        Margin="5,0,5,0"
+                        IsIndeterminate="True">
+                    <ProgressBar.Style>
+                        <Style TargetType="ProgressBar" >
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=DataClient.IsAwaiting}" Value="False"  />
+                                        <Condition Binding="{Binding Offices.DataClient.IsAwaiting}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ProgressBar.Style>
+                </ProgressBar>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Frame x:Name="panelContent" NavigationUIVisibility="Hidden" />
+
+    </DockPanel>
+</Window>
